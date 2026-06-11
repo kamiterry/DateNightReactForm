@@ -8,9 +8,16 @@ export default function DateNightRSVP() {
   const [date, setDate] = useState("");
   const [sending, setSending] = useState(false);
 
+const isFormComplete = main && wine && date;
+const scrollToNext = () => {
+  window.scrollBy({ top: 200, behavior: "smooth" });
+};
+
   const handleSubmit = () => {
     if (!main || !wine || !date) {
       alert("Please complete all selections 💌");
+
+      
       return;
     }
 
@@ -37,20 +44,20 @@ Can’t wait ❤️`
     }, 1200);
   };
 
-  const optionStyle = (selected) => ({
-    display: "block",
-    marginBottom: "10px",
-    padding: "12px",
-    borderRadius: "8px",
-    background: selected
-      ? "rgba(212,175,55,0.25)"
-      : "rgba(212,175,55,0.1)",
-    border: selected
-      ? "1px solid #d4af37"
-      : "1px solid rgba(212,175,55,0.4)",
-    cursor: "pointer",
-    transition: "all 0.2s ease"
-  });
+  const optionStyle = (selected) => ({
+    display: "block",
+    marginBottom: "10px",
+    padding: isMobile ? "14px" : "12px",
+    fontSize: isMobile ? "15px" : "16px",
+    borderRadius: "8px",
+    background: selected
+      ? "rgba(212,175,55,0.25)"
+      : "rgba(212,175,55,0.1)",
+    border: selected
+      ? "1px solid #d4af37"
+      : "1px solid rgba(212,175,55,0.4)",
+    cursor: "pointer"
+  });
 
 
   return (
@@ -117,15 +124,35 @@ Can’t wait ❤️`
           </h3>
           <div style={{ marginTop: "10px" }}>
             {["Tuna Ceviche", "Tuna Poke Bowl"].map((option) => (
-              <div
-                key={option}
-                onClick={() => setMain(option)}
-                style={optionStyle(main === option)}
-              >
-                 {option}
-              </div>
+              <motion.div
+key={option}
+onClick={() => {
+  setMain(option);
+  setTimeout(scrollToNext, 200);
+}}
+whileTap={{ scale: 0.96 }}
+animate={{
+  scale: main === option ? 1.03 : 1,
+  boxShadow:
+    main === option
+      ? "0 0 15px rgba(212,175,55,0.6)"
+      : "0 0 0px rgba(0,0,0,0)"
+}}
+transition={{ type: "spring", stiffness: 300 }}
+style={optionStyle(main === option)}
+>
+ {option}
+</motion.div>
             ))}
           </div>
+
+
+{main && (
+  <motion.div
+    initial={{ opacity: 0, y: 25 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+  >
 
 
           {/* Wine */}
@@ -134,33 +161,73 @@ Can’t wait ❤️`
           </h3>
           <div style={{ marginTop: "10px" }}>
             {["Wooded Chardonnay", "Sauvignon Blanc"].map((option) => (
-              <div
-                key={option}
-                onClick={() => setWine(option)}
-                style={optionStyle(wine === option)}
-              >
-                 {option}
-              </div>
+              <motion.div
+key={option}
+onClick={() => {
+  setWine(option);
+  setTimeout(scrollToNext, 200);
+}}
+whileTap={{ scale: 0.96 }}
+animate={{
+  scale: wine === option ? 1.03 : 1,
+  boxShadow:
+    wine === option
+      ? "0 0 15px rgba(212,175,55,0.6)"
+      : "0 0 0px rgba(0,0,0,0)"
+}}
+transition={{ type: "spring", stiffness: 300 }}
+style={optionStyle(wine === option)}
+>
+ {option}
+</motion.div>
             ))}
           </div>
+
+</motion.div>
+)}
+
+
+
+{wine && (
+  <motion.div
+    initial={{ opacity: 0, y: 25 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+  >
 
 
           {/* Date */}
           <h3 style={{ marginTop: "25px" }}>📅 Your Perfect Date</h3>
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "12px",
-              borderRadius: "6px",
-              border: "1px solid rgba(212,175,55,0.4)",
-              marginTop: "8px",
-              background: "#fff",
-              color: "#000"
-            }}
-          />
+          <motion.div
+  whileFocus={{ scale: 1.02 }}
+>
+  
+<input
+  type="date"
+  value={date}
+  onChange={(e) => setDate(e.target.value)}
+min={new Date().toISOString().split("T")[0]}
+max="2026-08-31"
+
+  style={{
+    width: "90%",
+    padding: "16px",
+    borderRadius: "10px",
+    border: "1px solid rgba(212,175,55,0.5)",
+    marginTop: "10px",
+    background: "rgba(255,255,255,0.95)",
+    color: "#000",
+    fontSize: "15px",
+    boxShadow: "0 0 10px rgba(212,175,55,0.2)",
+    outline: "none",
+    cursor: "pointer"
+  }}
+/>
+
+</motion.div>
+
+</motion.div>
+)}
 
 
           <p style={{ fontSize: "14px", color: "#cfe3ea" }}>
@@ -171,29 +238,37 @@ Can’t wait ❤️`
           {/* Button */}
           <div style={{ textAlign: "center", marginTop: "30px" }}>
             <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={handleSubmit}
-              style={{
-                background: "linear-gradient(90deg,#d4af37,#f5deb3)",
-                color: "#000",
-                padding: "14px 28px",
-                borderRadius: "30px",
-                fontWeight: "bold",
-                boxShadow: "0 0 18px rgba(212,175,55,0.7)",
-                border: "none",
-                cursor: "pointer"
-              }}
-            >
-              {sending
-                ? "Preparing your invitation... ✨"
-                : "Send My Choices "}
+             
+whileTap={{ scale: isFormComplete ? 0.95 : 1 }}
+  onClick={handleSubmit}
+  disabled={!isFormComplete}
+  style={{
+    background: isFormComplete
+      ? "linear-gradient(90deg,#d4af37,#f5deb3)"
+      : "rgba(255,255,255,0.15)",
+    color: isFormComplete ? "#000" : "#888",
+    padding: isMobile ? "16px 24px" : "14px 28px",
+    borderRadius: "30px",
+    fontWeight: "bold",
+    boxShadow: isFormComplete
+      ? "0 0 18px rgba(212,175,55,0.7)"
+      : "none",
+    border: "none",
+    cursor: isFormComplete ? "pointer" : "not-allowed",
+    width: isMobile ? "100%" : "auto",
+    opacity: isFormComplete ? 1 : 0.6
+  }}
+>
+  {sending
+    ? "Preparing your invitation... ✨"
+    : "Send My Choices 💌"}
             </motion.button>
           </div>
         </div>
 
 
         {/* Footer */}
-        <div style={{ textAlign: "center", padding: "40px" }}>
+        <div style={{ textAlign: "center", padding: isMobile ? "25px 20px" : "40px" }}>
           <p
             style={{
               fontStyle: "italic",
