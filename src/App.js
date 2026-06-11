@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+const isMobile = window.innerWidth < 600;
 
 export default function DateNightRSVP() {
   const [main, setMain] = useState("");
@@ -62,13 +63,14 @@ Can’t wait ❤️`
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
-        padding: "40px"
+        padding: isMobile ? "20px" : "40px"
+``
       }}
     >
       <div
         style={{
           width: "100%",
-          maxWidth: "620px",
+          maxWidth: isMobile ? "100%" : "620px",
           background: "linear-gradient(145deg,#0d1b22,#122c36)",
           borderRadius: "16px",
           boxShadow: "0 0 40px rgba(212,175,55,0.25)",
@@ -76,11 +78,12 @@ Can’t wait ❤️`
         }}
       >
         {/* Header */}
-        <div style={{ textAlign: "center", padding: "45px" }}>
+        <div style={{ textAlign: "center", padding: isMobile ? "25px 20px" : "45px"
+ }}>
           <h1
             style={{
               margin: 0,
-              fontSize: "36px",
+              fontSize: "32px",
               color: "#d4af37",
               textShadow: "0 0 12px rgba(212,175,55,0.6)",
               letterSpacing: "2px"
@@ -91,7 +94,8 @@ Can’t wait ❤️`
           <p
             style={{
               marginTop: "12px",
-              fontSize: "16px",
+              fontSize: isMobile ? "14px" : "16px",
+
               color: "#dbe7ec"
             }}
           >
@@ -103,7 +107,7 @@ Can’t wait ❤️`
           style={{ height: "1px", background: "rgba(212,175,55,0.3)" }}
         ></div>
         {/* Content */}
-        <div style={{ padding: "35px 45px" }}>
+        <div style={{ padding: isMobile ? "25px 20px" : "35px 45px" }}>
           <h3 style={{ color: "#d4af37" }}>🍤 Starter</h3>
           <p>Vietnamese Spring Rolls with Prawns and Peanut Satay Sauce</p>
 
@@ -118,7 +122,7 @@ Can’t wait ❤️`
                 onClick={() => setMain(option)}
                 style={optionStyle(main === option)}
               >
-                ✨ {option}
+                 {option}
               </div>
             ))}
           </div>
@@ -135,7 +139,7 @@ Can’t wait ❤️`
                 onClick={() => setWine(option)}
                 style={optionStyle(wine === option)}
               >
-                🥂 {option}
+                 {option}
               </div>
             ))}
           </div>
@@ -182,7 +186,7 @@ Can’t wait ❤️`
             >
               {sending
                 ? "Preparing your invitation... ✨"
-                : "Send My Choices 💌"}
+                : "Send My Choices "}
             </motion.button>
           </div>
         </div>
